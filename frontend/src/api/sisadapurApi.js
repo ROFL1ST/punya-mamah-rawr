@@ -21,7 +21,6 @@ const apiClient = axios.create({
  * Mencari resep berdasarkan daftar bahan yang dimiliki user.
  * @param {string[]} ingredients - Daftar nama bahan
  * @param {number} limit - Jumlah maksimal resep yang dikembalikan
- * @returns {Promise} Response dari API
  */
 export const searchRecipes = async (ingredients, limit = 10) => {
   const response = await apiClient.post('/recipes/search-recipes', {
@@ -33,7 +32,6 @@ export const searchRecipes = async (ingredients, limit = 10) => {
 
 /**
  * Mengambil semua resep dari database.
- * @returns {Promise} Daftar resep
  */
 export const getAllRecipes = async () => {
   const response = await apiClient.get('/recipes/');
@@ -42,9 +40,26 @@ export const getAllRecipes = async () => {
 
 /**
  * Mengambil semua bahan yang tersedia di database.
- * @returns {Promise} Daftar bahan
  */
 export const getAllIngredients = async () => {
   const response = await apiClient.get('/ingredients/');
+  return response.data;
+};
+
+/**
+ * Menambahkan bahan baru ke database.
+ * @param {{ name: string, unit?: string }} data - Data bahan
+ */
+export const addIngredient = async (data) => {
+  const response = await apiClient.post('/ingredients/', data);
+  return response.data;
+};
+
+/**
+ * Menambahkan resep baru ke database.
+ * @param {object} data - Data resep lengkap dengan daftar bahan
+ */
+export const addRecipe = async (data) => {
+  const response = await apiClient.post('/recipes/', data);
   return response.data;
 };
