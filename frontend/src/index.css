@@ -1,0 +1,18 @@
+/* Import Tailwind CSS directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Style global untuk aplikasi SisaDapur */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Animasi custom untuk loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

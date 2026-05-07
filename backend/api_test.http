@@ -1,0 +1,210 @@
+# =============================================================
+# api_test.http - File pengujian REST API untuk VS Code
+# Gunakan extension "REST Client" (Humao.rest-client) di VS Code
+# Cara pakai: Klik "Send Request" di atas setiap request
+# =============================================================
+
+@BASE_URL = http://localhost:8000
+
+### ─────────────────────────────────────────
+### 1. HEALTH CHECK - Cek status server
+### ─────────────────────────────────────────
+
+GET {{BASE_URL}}/
+Content-Type: application/json
+
+###
+
+GET {{BASE_URL}}/health
+Content-Type: application/json
+
+
+### ─────────────────────────────────────────
+### 2. INGREDIENTS - Tambah bahan masakan baru
+### ─────────────────────────────────────────
+
+# Tambah bahan: Bawang Merah
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "bawang merah",
+  "unit": "siung"
+}
+
+###
+
+# Tambah bahan: Telur
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "telur",
+  "unit": "butir"
+}
+
+###
+
+# Tambah bahan: Nasi
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "nasi",
+  "unit": "gram"
+}
+
+###
+
+# Tambah bahan: Kecap Manis
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "kecap manis",
+  "unit": "sdm"
+}
+
+###
+
+# Tambah bahan: Garam
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "garam",
+  "unit": "sdt"
+}
+
+###
+
+# Tambah bahan: Ayam
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "ayam",
+  "unit": "gram"
+}
+
+###
+
+# Tambah bahan: Mie
+POST {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+{
+  "name": "mie",
+  "unit": "bungkus"
+}
+
+###
+
+# Ambil semua bahan
+GET {{BASE_URL}}/ingredients/
+Content-Type: application/json
+
+###
+
+# Ambil bahan berdasarkan ID
+GET {{BASE_URL}}/ingredients/1
+Content-Type: application/json
+
+
+### ─────────────────────────────────────────
+### 3. RECIPES - Tambah resep baru
+### ─────────────────────────────────────────
+
+# Tambah resep: Nasi Goreng Spesial
+# Catatan: Pastikan ingredient_id sesuai dengan ID yang dibuat di langkah 2
+POST {{BASE_URL}}/recipes/
+Content-Type: application/json
+
+{
+  "name": "Nasi Goreng Spesial",
+  "description": "Nasi goreng lezat dengan telur dan kecap manis, cocok untuk sarapan",
+  "instructions": "1. Panaskan minyak di wajan.\n2. Tumis bawang merah hingga harum.\n3. Masukkan telur, orak-arik.\n4. Tambahkan nasi, aduk rata.\n5. Bumbui dengan kecap manis dan garam.\n6. Sajikan panas.",
+  "cooking_time": 15,
+  "servings": 2,
+  "difficulty": "Mudah",
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Nasi_goreng_ikan_asin.jpg/640px-Nasi_goreng_ikan_asin.jpg",
+  "ingredients": [
+    {"ingredient_id": 1, "quantity": 3, "unit": "siung"},
+    {"ingredient_id": 2, "quantity": 2, "unit": "butir"},
+    {"ingredient_id": 3, "quantity": 200, "unit": "gram"},
+    {"ingredient_id": 4, "quantity": 2, "unit": "sdm"},
+    {"ingredient_id": 5, "quantity": 1, "unit": "sdt"}
+  ]
+}
+
+###
+
+# Tambah resep: Mie Goreng Ayam
+POST {{BASE_URL}}/recipes/
+Content-Type: application/json
+
+{
+  "name": "Mie Goreng Ayam",
+  "description": "Mie goreng gurih dengan potongan ayam dan bumbu spesial",
+  "instructions": "1. Rebus mie hingga matang, tiriskan.\n2. Tumis bawang merah hingga harum.\n3. Masukkan ayam, masak hingga matang.\n4. Tambahkan mie, aduk rata.\n5. Bumbui kecap dan garam.",
+  "cooking_time": 20,
+  "servings": 2,
+  "difficulty": "Sedang",
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Mie_goreng.JPG/640px-Mie_goreng.JPG",
+  "ingredients": [
+    {"ingredient_id": 1, "quantity": 4, "unit": "siung"},
+    {"ingredient_id": 6, "quantity": 150, "unit": "gram"},
+    {"ingredient_id": 7, "quantity": 1, "unit": "bungkus"},
+    {"ingredient_id": 4, "quantity": 2, "unit": "sdm"},
+    {"ingredient_id": 5, "quantity": 1, "unit": "sdt"}
+  ]
+}
+
+###
+
+# Ambil semua resep
+GET {{BASE_URL}}/recipes/
+Content-Type: application/json
+
+###
+
+# Ambil resep berdasarkan ID
+GET {{BASE_URL}}/recipes/1
+Content-Type: application/json
+
+
+### ─────────────────────────────────────────
+### 4. SEARCH RECIPES - ENDPOINT UTAMA ⭐
+### Cari resep berdasarkan bahan yang tersedia
+### ─────────────────────────────────────────
+
+# Contoh 1: User punya telur, nasi, bawang merah (cocok untuk Nasi Goreng)
+POST {{BASE_URL}}/recipes/search-recipes
+Content-Type: application/json
+
+{
+  "ingredients": ["telur", "nasi", "bawang merah", "kecap manis"],
+  "limit": 10
+}
+
+###
+
+# Contoh 2: User punya ayam dan mie (cocok untuk Mie Goreng Ayam)
+POST {{BASE_URL}}/recipes/search-recipes
+Content-Type: application/json
+
+{
+  "ingredients": ["ayam", "mie", "bawang merah"],
+  "limit": 5
+}
+
+###
+
+# Contoh 3: Hanya punya garam (skor rendah, semua resep butuh garam)
+POST {{BASE_URL}}/recipes/search-recipes
+Content-Type: application/json
+
+{
+  "ingredients": ["garam"],
+  "limit": 10
+}
